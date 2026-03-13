@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Digital Twin — Crowd Flow Simulator</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <header class="app-header">
+        <h1>🏟️ Event Digital Twin</h1>
+        <span class="subtitle">2D Crowd Flow Simulation & Analysis</span>
+        <span id="simStatus" class="status-badge status-idle">IDLE</span>
+    </header>
+
+    <main class="app-layout">
+        <!-- ─── LEFT: 2D Venue Map ─────────────────────── -->
+        <section class="map-section">
+            <div class="map-container" id="mapContainer">
+                <svg id="venueMap" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet">
+                    <!-- Rendered dynamically by map.js -->
+                </svg>
+            </div>
+            <div class="map-legend">
+                <span class="legend-item"><span class="dot" style="background:#4A90D9"></span> Normal</span>
+                <span class="legend-item"><span class="dot" style="background:#FFD700"></span> VIP</span>
+                <span class="legend-item"><span class="dot" style="background:#27AE60"></span> Staff</span>
+                <span class="legend-item"><span class="dot" style="background:#E74C3C"></span> Evacuating</span>
+                <span class="legend-item"><span class="dot" style="background:#F39C12"></span> Queuing</span>
+                <span class="legend-item"><span class="dot" style="background:#95A5A6"></span> Leaving</span>
+            </div>
+        </section>
+
+        <!-- ─── RIGHT: Controls + Metrics ──────────────── -->
+        <aside class="side-panel">
+            <!-- Controls -->
+            <div class="panel-card" id="controlsPanel">
+                <h3>⚙️ Kontroller</h3>
+
+                <label>Senaryo:
+                    <select id="scenarioSelect">
+                        <option value="normal_flow">Normal Akış</option>
+                    </select>
+                </label>
+                <p id="scenarioDesc" class="scenario-desc"></p>
+
+                <label>Ziyaretçi Sayısı:
+                    <input type="number" id="visitorCount" value="300" min="10" max="5000" step="10">
+                </label>
+
+                <label>Varış Deseni:
+                    <select id="arrivalPattern">
+                        <option value="poisson">Poisson</option>
+                        <option value="uniform">Düzgün</option>
+                        <option value="peak_hour">Pik Saat</option>
+                        <option value="ticket_slot">Bilet Slotu</option>
+                        <option value="group">Grup</option>
+                    </select>
+                </label>
+
+                <label>Simülasyon Hızı: <span id="speedValue">5</span>x
+                    <input type="range" id="speedSlider" min="1" max="50" value="5" step="1">
+                </label>
+
+                <label>Süre (sn):
+                    <input type="number" id="simDuration" value="600" min="60" max="7200" step="60">
+                </label>
+
+                <div class="button-row">
+                    <button id="btnStart" class="btn btn-primary">▶ Başlat</button>
+                    <button id="btnReset" class="btn btn-secondary" disabled>⟲ Sıfırla</button>
+                </div>
+                <button id="btnEmergency" class="btn btn-danger" disabled>🚨 ACİL TAHLİYE</button>
+            </div>
+
+            <!-- Metrics -->
+            <div class="panel-card" id="metricsPanel">
+                <h3>📊 Metrikler</h3>
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <span class="metric-label">Sim. Zamanı</span>
+                        <span class="metric-value" id="metricTime">0.0s</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Toplam Giren</span>
+                        <span class="metric-value" id="metricEntered">0</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Aktif Ziyaretçi</span>
+                        <span class="metric-value" id="metricActive">0</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Toplam Çıkan</span>
+                        <span class="metric-value" id="metricExited">0</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Ort. Bekleme</span>
+                        <span class="metric-value" id="metricAvgWait">0.0s</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Max Bekleme</span>
+                        <span class="metric-value" id="metricMaxWait">0.0s</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Tahliye Süresi</span>
+                        <span class="metric-value" id="metricEvacTime">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gate Stats -->
+            <div class="panel-card" id="gatePanel">
+                <h3>🚪 Kapı Durumları</h3>
+                <div id="gateStats" class="gate-stats"></div>
+            </div>
+
+            <!-- Alerts -->
+            <div class="panel-card" id="alertsPanel">
+                <h3>⚠️ Uyarılar</h3>
+                <ul id="alertsList" class="alerts-list">
+                    <li class="no-alerts">Henüz uyarı yok</li>
+                </ul>
+            </div>
+        </aside>
+    </main>
+
+    <!-- ─── BOTTOM: Charts & Recommendations ───────── -->
+    <section class="bottom-section">
+        <div class="panel-card chart-card">
+            <h3>📈 Kuyruk Uzunlukları</h3>
+            <canvas id="queueChart" height="200"></canvas>
+        </div>
+        <div class="panel-card chart-card">
+            <h3>📈 Bölge Yoğunlukları</h3>
+            <canvas id="densityChart" height="200"></canvas>
+        </div>
+        <div class="panel-card chart-card">
+            <h3>📈 Kapı Çıktısı</h3>
+            <canvas id="throughputChart" height="200"></canvas>
+        </div>
+        <div class="panel-card recommendations-card">
+            <h3>💡 Öneriler</h3>
+            <ul id="recommendationsList" class="recommendations-list">
+                <li>Simülasyon başlatıldıktan sonra öneriler burada görüntülenecektir.</li>
+            </ul>
+        </div>
+    </section>
+
+    <footer class="app-footer">
+        <span>Event Digital Twin v1.0 — HARMONI Project</span>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/static/js/map.js"></script>
+    <script src="/static/js/charts.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

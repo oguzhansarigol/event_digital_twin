@@ -1,0 +1,11 @@
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+simpy>=4.1.1
+networkx>=3.2
+numpy>=2.0.0
+pandas>=2.2.0
+pydantic>=2.5.0
+jinja2>=3.1.2
+aiofiles>=23.2.0
+python-multipart>=0.0.6
+websockets>=12.0

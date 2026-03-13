@@ -1,0 +1,101 @@
+{
+  "name": "HARMONI Event Venue",
+  "width": 1000,
+  "height": 700,
+  "nodes": [
+    {"id": "gate_a", "x": 150, "y": 15, "type": "entry_gate", "label": "Gate A"},
+    {"id": "gate_b", "x": 500, "y": 15, "type": "entry_gate", "label": "Gate B"},
+    {"id": "gate_c", "x": 850, "y": 15, "type": "entry_gate", "label": "Gate C"},
+    {"id": "gate_d", "x": 985, "y": 350, "type": "entry_gate", "label": "Gate D"},
+
+    {"id": "i_nw", "x": 150, "y": 160, "type": "intersection", "label": ""},
+    {"id": "i_n",  "x": 500, "y": 160, "type": "intersection", "label": ""},
+    {"id": "i_ne", "x": 850, "y": 160, "type": "intersection", "label": ""},
+    {"id": "i_w",  "x": 150, "y": 350, "type": "intersection", "label": ""},
+    {"id": "i_c",  "x": 500, "y": 350, "type": "intersection", "label": "Central Hub"},
+    {"id": "i_e",  "x": 850, "y": 350, "type": "intersection", "label": ""},
+    {"id": "i_sw", "x": 150, "y": 530, "type": "intersection", "label": ""},
+    {"id": "i_s",  "x": 500, "y": 530, "type": "intersection", "label": ""},
+    {"id": "i_se", "x": 850, "y": 530, "type": "intersection", "label": ""},
+
+    {"id": "main_stage", "x": 500, "y": 640, "type": "zone", "label": "Main Stage", "zone_id": "main_stage", "capacity": 500, "width": 240, "height": 80, "zone_type": "entertainment"},
+    {"id": "fan_zone",   "x": 260, "y": 580, "type": "zone", "label": "Fan Zone",   "zone_id": "fan_zone",   "capacity": 300, "width": 160, "height": 70, "zone_type": "entertainment"},
+    {"id": "food_court", "x": 900, "y": 210, "type": "zone", "label": "Food Court", "zone_id": "food_court", "capacity": 200, "width": 130, "height": 70, "zone_type": "service"},
+    {"id": "vip_area",   "x": 730, "y": 580, "type": "zone", "label": "VIP Area",   "zone_id": "vip_area",   "capacity": 100, "width": 130, "height": 70, "zone_type": "restricted"},
+    {"id": "toilets_w",  "x": 55,  "y": 255, "type": "zone", "label": "Toilets W",  "zone_id": "toilets_w",  "capacity": 50,  "width": 80,  "height": 50, "zone_type": "service"},
+    {"id": "toilets_e",  "x": 945, "y": 460, "type": "zone", "label": "Toilets E",  "zone_id": "toilets_e",  "capacity": 50,  "width": 80,  "height": 50, "zone_type": "service"},
+    {"id": "medical",    "x": 55,  "y": 530, "type": "zone", "label": "Medical",    "zone_id": "medical",    "capacity": 30,  "width": 80,  "height": 50, "zone_type": "service"},
+
+    {"id": "exit_nw", "x": 15,  "y": 80,  "type": "emergency_exit", "label": "Exit NW"},
+    {"id": "exit_ne", "x": 985, "y": 80,  "type": "emergency_exit", "label": "Exit NE"},
+    {"id": "exit_sw", "x": 15,  "y": 650, "type": "emergency_exit", "label": "Exit SW"},
+    {"id": "exit_se", "x": 985, "y": 650, "type": "emergency_exit", "label": "Exit SE"}
+  ],
+  "edges": [
+    {"from": "gate_a", "to": "i_nw",  "width": 3},
+    {"from": "gate_b", "to": "i_n",   "width": 3},
+    {"from": "gate_c", "to": "i_ne",  "width": 3},
+    {"from": "gate_d", "to": "i_e",   "width": 2},
+
+    {"from": "i_nw", "to": "i_n",  "width": 3},
+    {"from": "i_n",  "to": "i_ne", "width": 3},
+    {"from": "i_w",  "to": "i_c",  "width": 3},
+    {"from": "i_c",  "to": "i_e",  "width": 3},
+    {"from": "i_sw", "to": "i_s",  "width": 3},
+    {"from": "i_s",  "to": "i_se", "width": 3},
+
+    {"from": "i_nw", "to": "i_w",  "width": 3},
+    {"from": "i_w",  "to": "i_sw", "width": 3},
+    {"from": "i_n",  "to": "i_c",  "width": 3},
+    {"from": "i_c",  "to": "i_s",  "width": 3},
+    {"from": "i_ne", "to": "i_e",  "width": 3},
+    {"from": "i_e",  "to": "i_se", "width": 3},
+
+    {"from": "i_nw", "to": "i_c",  "width": 2},
+    {"from": "i_ne", "to": "i_c",  "width": 2},
+    {"from": "i_c",  "to": "i_sw", "width": 2},
+    {"from": "i_c",  "to": "i_se", "width": 2},
+
+    {"from": "i_s",  "to": "main_stage", "width": 3},
+    {"from": "i_sw", "to": "fan_zone",   "width": 2},
+    {"from": "i_s",  "to": "fan_zone",   "width": 2},
+    {"from": "i_ne", "to": "food_court", "width": 2},
+    {"from": "i_e",  "to": "food_court", "width": 2},
+    {"from": "i_se", "to": "vip_area",   "width": 2},
+    {"from": "i_s",  "to": "vip_area",   "width": 2},
+    {"from": "i_nw", "to": "toilets_w",  "width": 1},
+    {"from": "i_w",  "to": "toilets_w",  "width": 1},
+    {"from": "i_e",  "to": "toilets_e",  "width": 1},
+    {"from": "i_se", "to": "toilets_e",  "width": 1},
+    {"from": "i_sw", "to": "medical",    "width": 1},
+    {"from": "i_w",  "to": "medical",    "width": 1},
+
+    {"from": "i_nw", "to": "exit_nw", "width": 2},
+    {"from": "i_ne", "to": "exit_ne", "width": 2},
+    {"from": "i_sw", "to": "exit_sw", "width": 2},
+    {"from": "i_se", "to": "exit_se", "width": 2},
+    {"from": "medical",    "to": "exit_sw", "width": 2},
+    {"from": "fan_zone",   "to": "exit_sw", "width": 1},
+    {"from": "main_stage", "to": "exit_sw", "width": 1},
+    {"from": "main_stage", "to": "exit_se", "width": 1},
+    {"from": "vip_area",   "to": "exit_se", "width": 1},
+
+    {"from": "gate_a", "to": "exit_nw", "width": 2},
+    {"from": "gate_c", "to": "exit_ne", "width": 2}
+  ],
+  "gates": {
+    "gate_a": {"capacity": 3, "service_time": 5.0, "status": "open"},
+    "gate_b": {"capacity": 4, "service_time": 4.0, "status": "open"},
+    "gate_c": {"capacity": 3, "service_time": 5.0, "status": "open"},
+    "gate_d": {"capacity": 2, "service_time": 6.0, "status": "open"}
+  },
+  "zones": {
+    "main_stage": {"capacity": 500, "zone_type": "entertainment"},
+    "fan_zone":   {"capacity": 300, "zone_type": "entertainment"},
+    "food_court": {"capacity": 200, "zone_type": "service"},
+    "vip_area":   {"capacity": 100, "zone_type": "restricted"},
+    "toilets_w":  {"capacity": 50,  "zone_type": "service"},
+    "toilets_e":  {"capacity": 50,  "zone_type": "service"},
+    "medical":    {"capacity": 30,  "zone_type": "service"}
+  }
+}

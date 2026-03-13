@@ -1,0 +1,61 @@
+{
+  "scenarios": [
+    {
+      "id": "normal_flow",
+      "name": "Normal Event Flow",
+      "description": "Standard event conditions. All gates open, moderate crowd, Poisson arrivals.",
+      "default_visitors": 300,
+      "default_arrival": "poisson",
+      "default_duration": 600,
+      "gate_overrides": null,
+      "emergency_at": null
+    },
+    {
+      "id": "peak_hour",
+      "name": "Peak Hour Congestion",
+      "description": "High visitor density concentrated in a short window. Tests peak load capacity.",
+      "default_visitors": 500,
+      "default_arrival": "peak_hour",
+      "default_duration": 400,
+      "gate_overrides": null,
+      "emergency_at": null
+    },
+    {
+      "id": "gate_failure",
+      "name": "Gate Failure",
+      "description": "Gate B fails at the start. Only 3 gates handle all traffic. Tests redistribution.",
+      "default_visitors": 350,
+      "default_arrival": "poisson",
+      "default_duration": 600,
+      "gate_overrides": {
+        "gate_b": {"status": "closed", "capacity": 0}
+      },
+      "emergency_at": null
+    },
+    {
+      "id": "security_delay",
+      "name": "Security Delay",
+      "description": "Security processing takes 3x longer at all gates. Tests queue buildup.",
+      "default_visitors": 300,
+      "default_arrival": "poisson",
+      "default_duration": 800,
+      "gate_overrides": {
+        "gate_a": {"service_time": 15.0},
+        "gate_b": {"service_time": 12.0},
+        "gate_c": {"service_time": 15.0},
+        "gate_d": {"service_time": 18.0}
+      },
+      "emergency_at": null
+    },
+    {
+      "id": "emergency_evacuation",
+      "name": "Emergency Evacuation",
+      "description": "Normal flow for 200s, then emergency triggers. All visitors evacuate.",
+      "default_visitors": 400,
+      "default_arrival": "peak_hour",
+      "default_duration": 600,
+      "gate_overrides": null,
+      "emergency_at": 200.0
+    }
+  ]
+}

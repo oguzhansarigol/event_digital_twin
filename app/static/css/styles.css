@@ -1,0 +1,453 @@
+/* ── Reset & Base ───────────────────────────────────── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg-dark: #0f1923;
+    --bg-card: #1a2733;
+    --bg-input: #243447;
+    --text-primary: #e8edf2;
+    --text-secondary: #8899a6;
+    --accent-blue: #4A90D9;
+    --accent-green: #27AE60;
+    --accent-orange: #F39C12;
+    --accent-red: #E74C3C;
+    --accent-gold: #FFD700;
+    --border-color: #2d4050;
+    --radius: 8px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    line-height: 1.5;
+    min-height: 100vh;
+}
+
+/* ── Header ────────────────────────────────────────── */
+.app-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #1a2733 0%, #0f1923 100%);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.app-header h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+}
+
+.app-header .subtitle {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.status-badge {
+    margin-left: auto;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.status-idle { background: #2d4050; color: #8899a6; }
+.status-running { background: #1a4d2e; color: #27AE60; animation: pulse 1.5s infinite; }
+.status-emergency { background: #4d1a1a; color: #E74C3C; animation: pulse 0.8s infinite; }
+.status-complete { background: #1a3d4d; color: #4A90D9; }
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+/* ── Main Layout ───────────────────────────────────── */
+.app-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 16px;
+    padding: 16px;
+    max-height: calc(100vh - 200px);
+}
+
+/* ── Map Section ───────────────────────────────────── */
+.map-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.map-container {
+    background: #0a1520;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+}
+
+#venueMap {
+    width: 100%;
+    height: auto;
+    max-height: calc(100vh - 280px);
+    display: block;
+}
+
+.map-legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    padding: 4px 0;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* ── Side Panel ────────────────────────────────────── */
+.side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+    max-height: calc(100vh - 200px);
+    padding-right: 4px;
+}
+
+.side-panel::-webkit-scrollbar {
+    width: 6px;
+}
+.side-panel::-webkit-scrollbar-track {
+    background: transparent;
+}
+.side-panel::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+/* ── Panel Card ────────────────────────────────────── */
+.panel-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 14px;
+    box-shadow: var(--shadow);
+}
+
+.panel-card h3 {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    color: var(--accent-blue);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 6px;
+}
+
+/* ── Controls ──────────────────────────────────────── */
+#controlsPanel label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 8px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+#controlsPanel select,
+#controlsPanel input[type="number"] {
+    background: var(--bg-input);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    width: 100%;
+}
+
+#controlsPanel input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent-blue);
+}
+
+.scenario-desc {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin-bottom: 8px;
+    min-height: 30px;
+}
+
+.button-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex: 1;
+}
+
+.btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: var(--accent-blue);
+    color: white;
+}
+.btn-primary:hover:not(:disabled) {
+    background: #3a7bc8;
+}
+
+.btn-secondary {
+    background: var(--bg-input);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+.btn-secondary:hover:not(:disabled) {
+    background: #2d4050;
+}
+
+.btn-danger {
+    background: var(--accent-red);
+    color: white;
+    width: 100%;
+}
+.btn-danger:hover:not(:disabled) {
+    background: #c0392b;
+}
+
+/* ── Metrics Grid ──────────────────────────────────── */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.metric {
+    background: var(--bg-input);
+    border-radius: 4px;
+    padding: 8px;
+    text-align: center;
+}
+
+.metric-label {
+    display: block;
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.metric-value {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-top: 2px;
+}
+
+/* ── Gate Stats ────────────────────────────────────── */
+.gate-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.gate-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    background: var(--bg-input);
+    border-radius: 4px;
+    font-size: 0.78rem;
+}
+
+.gate-name {
+    font-weight: 600;
+    min-width: 60px;
+    color: var(--accent-blue);
+}
+
+.gate-bar-container {
+    flex: 1;
+    height: 14px;
+    background: #0f1923;
+    border-radius: 7px;
+    overflow: hidden;
+    position: relative;
+}
+
+.gate-bar {
+    height: 100%;
+    border-radius: 7px;
+    transition: width 0.3s ease;
+}
+
+.gate-bar.low { background: var(--accent-green); }
+.gate-bar.medium { background: var(--accent-orange); }
+.gate-bar.high { background: var(--accent-red); }
+
+.gate-count {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    min-width: 30px;
+    text-align: right;
+}
+
+.gate-status {
+    font-size: 0.65rem;
+    padding: 1px 6px;
+    border-radius: 3px;
+    text-transform: uppercase;
+}
+.gate-status.open { background: #1a4d2e; color: #27AE60; }
+.gate-status.closed { background: #4d1a1a; color: #E74C3C; }
+
+/* ── Alerts ────────────────────────────────────────── */
+.alerts-list {
+    list-style: none;
+    max-height: 120px;
+    overflow-y: auto;
+    font-size: 0.78rem;
+}
+
+.alerts-list li {
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.no-alerts {
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* ── Bottom Section ────────────────────────────────── */
+.bottom-section {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    padding: 0 16px 16px;
+}
+
+.chart-card canvas {
+    width: 100% !important;
+    max-height: 180px;
+}
+
+.recommendations-card {
+    max-height: 260px;
+    overflow-y: auto;
+}
+
+.recommendations-list {
+    list-style: none;
+    font-size: 0.78rem;
+}
+
+.recommendations-list li {
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    line-height: 1.4;
+}
+
+/* ── Footer ────────────────────────────────────────── */
+.app-footer {
+    text-align: center;
+    padding: 8px;
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* ── SVG Map Styles ────────────────────────────────── */
+.zone-rect {
+    stroke-width: 1.5;
+    rx: 6;
+    ry: 6;
+}
+
+.zone-label {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 11px;
+    fill: #e8edf2;
+    text-anchor: middle;
+    pointer-events: none;
+    font-weight: 600;
+}
+
+.node-label {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 9px;
+    fill: #8899a6;
+    text-anchor: middle;
+    pointer-events: none;
+}
+
+.path-line {
+    stroke: #2d4050;
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+.gate-marker {
+    cursor: pointer;
+}
+
+.visitor-dot {
+    transition: cx 0.15s linear, cy 0.15s linear;
+}
+
+/* ── Responsive ────────────────────────────────────── */
+@media (max-width: 1200px) {
+    .app-layout {
+        grid-template-columns: 1fr;
+    }
+    .side-panel {
+        max-height: none;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .side-panel .panel-card {
+        flex: 1;
+        min-width: 280px;
+    }
+    .bottom-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .bottom-section {
+        grid-template-columns: 1fr;
+    }
+}
